@@ -20,22 +20,8 @@ def print_towers():
 
 
 def get_ht_solution(src, aux, dst, n):
-    if n == 1:
-        dst.append(src.pop())
-    else:
+    if n > 0:
         get_ht_solution(src, dst, aux, n - 1)
-        get_ht_solution(src, aux, dst, 1)
+        dst.append(src.pop())
+        print_towers()
         get_ht_solution(aux, src, dst, n - 1)
-    print_towers()
-
-
-
-
-def main():
-    hanoi_towers(4)
-
-
-if __name__ == '__main__':
-    main()
-
-

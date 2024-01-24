@@ -1,49 +1,39 @@
 import logging
 import threading
+from os.path import basename
 import time
 import concurrent.futures
 
 
-class FakeDatabase:
-    def __init__(self):
-        self.value = 0
-
-    def update(self, name):
-        logging.info("Thread %s: starting update", name)
-        local_copy = self.value
-        local_copy += 1
-        time.sleep(0.1)
-        self.value = local_copy
-        logging.info("Thread %s: finishing update", name)
+logpath = basename(__file__) + '.txt'
+lock = threading.Lock
 
 
-def thread_logging(name, timestamp):
-    return "Thread {}: starting in {}".format(name, timestamp)
+def safe_logging(massage, logger):
+    with lock:
+        with open(open(logpath, "a")) as logfile:
+            logfile.write(massage)
 
 
 def main():
-    format = "%(asctime)s: %(message)s"
-    logging.basicConfig(format=format, level=logging.INFO,
-                        datefmt="%H:%M:%S")
+    # create a logger
+    logger = logging.getLogger()
+    # set logger level
+    logger.setLevel(logging.INFO)
 
-    database = FakeDatabase()
-    logging.info("Testing update. Starting value is %d.", database.value)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-        for index in range(2):
-            executor.submit(database.update, index)
-    logging.info("Testing update. Ending value is %d.", database.value)
+    # create file handler
+    file_hdlr = logging.FileHandler(logpath, mode='a')
+    # set level
+    file_hdlr.setLevel(logging.INFO)
 
-    
+    # add handler to logger
+    logger.addHandler(file_hdlr)
 
-    logging.basicConfig(filename=logname,
-                        filemode='a',
-                        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                        datefmt='%H:%M:%S',
-                        level=logging.DEBUG)
+    fmt = "%(asctime)s: %(message)s"
 
-    logging.info("Running Urban Planning")
+    logging.basicConfig(format=fmt, filename=logpath, level=logging.INFO, datefmt="%H:%M:%S")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
 
-    logger = logging.getLogger('urbanGUI')
 
 
 if __name__ == "__main__":
