@@ -27,7 +27,6 @@ def create_and_log_threads(threads_num):
     # add handler to logger
     logger.addHandler(file_hdlr)
 
-
     fmt = "%(asctime)s: %(message)s"
 
     logging.basicConfig(format=fmt, filename=logpath, level=logging.INFO, datefmt="%H:%M:%S")
