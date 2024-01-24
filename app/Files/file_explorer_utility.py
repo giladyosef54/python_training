@@ -1,5 +1,5 @@
 from os import listdir
-from os.path import isfile, basename, join
+from os.path import isfile, basename, join, isdir
 
 
 def directory_listing(dirpath, indent = '', full_path = True):
@@ -22,10 +22,13 @@ def read_file_by_generator(filepath):
 
 
 def search_function(pattern, dirpath):
-    if pattern in basename(dirpath): yield basename(dirpath)
-    for name in listdir(dirpath):
-        if isfile(join(dirpath,name)):
-            if pattern in basename(dirpath): yield basename(dirpath)
-        else:
-            search_function(join(dirpath,name))
+    if pattern in basename(dirpath):
+        yield dirpath
+
+    for child_name in listdir(dirpath):
+        child_path = join(dirpath, child_name)
+        if isdir(child_path):
+            yield from search_function(pattern, child_path)
+        elif pattern in child_name:
+            yield child_path
 
