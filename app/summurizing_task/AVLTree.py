@@ -12,7 +12,8 @@ class AVLTree(BST):
 
         def update_height(self):
             self.height = \
-                max(0 if self.right is None else self.right.height, 0 if self.left is None else self.left.height) + 1
+                max(0 if self.right is None else self.right.height,
+                    0 if self.left is None else self.left.height) + 1
 
         @property
         def height(self):
@@ -81,11 +82,18 @@ class AVLTree(BST):
 
         new_subroot = node.right
 
-        AVLTree.connect_nodes(node, new_subroot.left)
+        node.right = new_subroot.left
+        if new_subroot.left is not None:
+            new_subroot.left.parent = node
+
         new_subroot.parent = node.parent
-        if node.parent is not None:
-            node.parent.right = new_subroot
-        AVLTree.connect_nodes(new_subroot, node)
+
+
+        new_subroot.left = node
+        node.parent = new_subroot
+
+        node.update_height()
+        new_subroot.update_height()
 
         return new_subroot
 
@@ -94,12 +102,18 @@ class AVLTree(BST):
 
         new_subroot = node.left
 
-        AVLTree.connect_nodes(node, new_subroot.right)
+        node.left = new_subroot.right
+        if new_subroot.right is not None:
+            new_subroot.right.parent = node
+
         new_subroot.parent = node.parent
-        if node.parent is not None:
-            node.parent.left = new_subroot
-        AVLTree.connect_nodes(new_subroot, node)
-        # update height -----------------------------------------------------------------------
+
+        new_subroot.right = node
+        node.parent = new_subroot
+
+        node.update_height()
+        new_subroot.update_height()
+
         return new_subroot
 
     @staticmethod
@@ -115,5 +129,5 @@ class AVLTree(BST):
                 father.left = son
             else:
                 father.right = son
-        father.update_height()
+
 
