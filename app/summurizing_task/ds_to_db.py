@@ -59,6 +59,9 @@ class ds_to_db(AVLTree.AVLTree):
             self._dwarf_col.delete_one(treasure_query)
             return 200
 
+    def search_treasure(self, value):
+        return 200 if self.exist(value) else 400
+
     def compare_ds_db(self):
         tree_values = set()
         for val in self:
