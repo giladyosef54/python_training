@@ -48,9 +48,30 @@ def search_treasure():
     value = float(value)
     status = tree.search_treasure(value)
     if status == 200:
-        response = {'message': 'Treasure found!', 'status': status}
+        response = {'message': 'Treasure found!'}, status
     else:
         response = {'message': 'Treasure not found'}, status
+    return response
+
+
+@app.get('/pre_order_traversal')
+def pre_order_traversal():
+    values, status = tree.pre_order_traversal()
+    response = {'traversal_result': values}, status
+    return response
+
+
+@app.get('/in_order_traversal')
+def in_order_traversal():
+    values, status = tree.in_order_traversal()
+    response = {'traversal_result': values}, status
+    return response
+
+
+@app.get('/post_order_traversal')
+def post_order_traversal():
+    values, status = tree.post_order_traversal()
+    response = {'traversal_result': values}, status
     return response
 
 

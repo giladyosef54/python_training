@@ -62,6 +62,18 @@ class ds_to_db(AVLTree.AVLTree):
     def search_treasure(self, value):
         return 200 if self.exist(value) else 400
 
+    def pre_order_traversal(self):
+        values = self.get_pre_order_values()
+        return values, 200
+
+    def in_order_traversal(self):
+        values = self.get_in_order_values()
+        return values, 200
+
+    def post_order_traversal(self):
+        values = self.get_post_order_values()
+        return values, 200
+
     def compare_ds_db(self):
         tree_values = set()
         for val in self:

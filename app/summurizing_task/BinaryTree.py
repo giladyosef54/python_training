@@ -30,7 +30,38 @@ class BinaryTree(ABC):
     def clear(self):
         self._root = None
 
+    def get_in_order_values(self):
+        return self._get_in_order_values(self._root)
 
+    def get_pre_order_values(self):
+        return self._get_pre_order_values(self._root)
+
+    def get_post_order_values(self):
+        return self._get_post_order_values(self._root)
+
+    @staticmethod
+    def _get_in_order_values(node, values_list = list()):
+        if node:
+            BinaryTree._get_in_order_values(node.left, values_list)
+            values_list.append(node.value)
+            BinaryTree._get_in_order_values(node.right, values_list)
+            return values_list
+
+    @staticmethod
+    def _get_pre_order_values(node, values_list=list()):
+        if node:
+            values_list.append(node.value)
+            BinaryTree._get_pre_order_values(node.left, values_list)
+            BinaryTree._get_pre_order_values(node.right, values_list)
+            return values_list
+
+    @staticmethod
+    def _get_post_order_values(node, values_list=list()):
+        if node:
+            BinaryTree._get_post_order_values(node.left, values_list)
+            BinaryTree._get_post_order_values(node.right, values_list)
+            values_list.append(node.value)
+            return values_list
 
 
 class InOrderIterator:
