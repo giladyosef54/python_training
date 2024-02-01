@@ -74,6 +74,12 @@ class ds_to_db(AVLTree.AVLTree):
         values = self.get_post_order_values()
         return values, 200
 
+    def validate(self):
+        return self._validate_subtree(self._root) and \
+                super()._validate_subtree(self._root)
+
+
+
     def compare_ds_db(self):
         tree_values = set()
         for val in self:
@@ -87,6 +93,14 @@ class ds_to_db(AVLTree.AVLTree):
             return 200
         else:
             return 400
+
+    @staticmethod
+    def _validate_subtree(node):
+        if node:
+            return (node.left.value < node.value if node.left else True) and \
+                   (node.value < node.right.value if node.right else True) and \
+                   ds_to_db._validate_subtree(node.left) and ds_to_db._validate_subtree(node.right)
+        return True
 
 
 

@@ -48,6 +48,11 @@ class AVLTree(BST):
     def exist(self, value):
         return bool(AVLTree._find(self._root, value))
 
+    def validate(self):
+        return super()._validate_subtree(self._root) and \
+                self._validate_subtree(self._root)
+
+
     @staticmethod
     def _insert_to_node(value, node):
         if value < node.value:
@@ -228,6 +233,14 @@ class AVLTree(BST):
                 father.left = son
             else:
                 father.right = son
+
+    @staticmethod
+    def _validate_subtree(node):
+        if node:
+            subtree_is_valid = AVLTree._validate_subtree(node.left) and AVLTree._validate_subtree(node.right)
+            node.update_height()
+            return subtree_is_valid and abs(node.balance) < 2
+        return True
 
 
 

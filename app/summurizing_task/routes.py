@@ -1,5 +1,6 @@
 import ds_to_db
 from flask import Flask, request
+from json import dumps
 
 app = Flask(__name__)
 
@@ -73,6 +74,19 @@ def post_order_traversal():
     values, status = tree.post_order_traversal()
     response = {'traversal_result': values}, status
     return response
+
+
+@app.get('/validate_bst')
+def validate_bst():
+    if tree.validate():
+        status = 200
+        data = dumps({'message': 'BST is valid'})
+    else:
+        status = 400
+        data = dumps({'message': 'BST is not valid'})
+    return data, status
+
+
 
 
 def main():
