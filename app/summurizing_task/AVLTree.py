@@ -27,11 +27,11 @@ class AVLTree(BST):
         def balance(self):
             return (0 if self.right is None else self.right.height) - (0 if self.left is None else self.left.height)
 
-        def get_rightmost_son(self):
+        def get_mostright_son(self):
             if self.right is None:
                 return self
             else:
-                return self.right.get_rightmost_son()
+                return self.right.get_mostright_son()
 
     def __init__(self):
         super().__init__()
@@ -90,14 +90,14 @@ class AVLTree(BST):
 
                     AVLTree.replace_node(node, new_node)
 
-                    new_node = AVLTree.balance_subtree(new_node)
+                    # new_node = AVLTree.balance_subtree(new_node)
                     return new_node
                 elif node.left is not None and node.right is None:
                     new_node = node.left
 
                     AVLTree.replace_node(node, new_node)
 
-                    new_node = AVLTree.balance_subtree(new_node)
+                    # new_node = AVLTree.balance_subtree(new_node)
                     return new_node
                 elif node.left is None and node.right is None:
                     new_node = None
@@ -107,14 +107,16 @@ class AVLTree(BST):
                     return new_node
                 else:
                     new_value = node.left.get_mostright_son().value
-                    node.left = AVLTree._delete(new_value)
+                    node.left = AVLTree._delete(node.left, new_value)
                     node.value = new_value
 
                     node = AVLTree.balance_subtree(node)
             elif value < node.value:
-                pass
+                node.left = AVLTree._delete(node.left, value)
+                node = AVLTree.balance_subtree(node)
             elif value > node.value:
-                pass
+                node.right = AVLTree._delete(node.right, value)
+                node = AVLTree.balance_subtree(node)
             node.update_height()
         return node
 
