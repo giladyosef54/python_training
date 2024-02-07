@@ -2,16 +2,16 @@ import pymongo
 import AVLTree
 
 
-collections_metadata_col = 'dwarfs'
-treasures_and_keepers_db = 'Treasures_and_keepers'
-host_url = "mongodb://localhost:27017/"
+COLLECTIONS_METADATA_COL = 'dwarfs'
+TREASURES_AND_KEEPERS_DB = 'Treasures_and_keepers'
+HOST_URL = "mongodb://localhost:27017/"
 
 
 class ds_to_db(AVLTree.AVLTree):
     def __init__(self, dwarf_name ='gilad_yosef',  # Collection of records
-                 dwarfs_col_name = collections_metadata_col,
-                 db_name = treasures_and_keepers_db,
-                 bt_connection_string = host_url):
+                 dwarfs_col_name = COLLECTIONS_METADATA_COL,
+                 db_name = TREASURES_AND_KEEPERS_DB,
+                 bt_connection_string = HOST_URL):
 
         super().__init__()
 

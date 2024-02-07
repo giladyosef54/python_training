@@ -1,5 +1,4 @@
 from abc import abstractmethod, ABC
-import pymongo
 
 
 class BinaryTree(ABC):
@@ -8,14 +7,6 @@ class BinaryTree(ABC):
             self.left = None
             self.right = None
             self.value = value
-
-        @property
-        def value(self):
-            return self._value
-
-        @value.setter
-        def value(self, value):
-            self._value = value
 
     def __init__(self):
         self._root = None
@@ -40,7 +31,7 @@ class BinaryTree(ABC):
         return self._get_post_order_values(self._root)
 
     @staticmethod
-    def _get_in_order_values(node, values_list = list()):
+    def _get_in_order_values(node, values_list = []):
         if node:
             BinaryTree._get_in_order_values(node.left, values_list)
             values_list.append(node.value)
@@ -48,7 +39,7 @@ class BinaryTree(ABC):
             return values_list
 
     @staticmethod
-    def _get_pre_order_values(node, values_list=list()):
+    def _get_pre_order_values(node, values_list = []):
         if node:
             values_list.append(node.value)
             BinaryTree._get_pre_order_values(node.left, values_list)
@@ -56,7 +47,7 @@ class BinaryTree(ABC):
             return values_list
 
     @staticmethod
-    def _get_post_order_values(node, values_list=list()):
+    def _get_post_order_values(node, values_list = []):
         if node:
             BinaryTree._get_post_order_values(node.left, values_list)
             BinaryTree._get_post_order_values(node.right, values_list)
