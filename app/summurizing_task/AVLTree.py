@@ -52,7 +52,6 @@ class AVLTree(BST):
         return super()._validate_subtree(self._root) and \
                 self._validate_subtree(self._root)
 
-
     @staticmethod
     def _insert_to_node(value, node):
         if value < node.value:
@@ -95,14 +94,12 @@ class AVLTree(BST):
 
                     AVLTree.replace_node(node, new_node)
 
-                    # new_node = AVLTree.balance_subtree(new_node)
                     return new_node
                 elif node.left is not None and node.right is None:
                     new_node = node.left
 
                     AVLTree.replace_node(node, new_node)
 
-                    # new_node = AVLTree.balance_subtree(new_node)
                     return new_node
                 elif node.left is None and node.right is None:
                     new_node = None
@@ -238,7 +235,6 @@ class AVLTree(BST):
     def _validate_subtree(node):
         if node:
             subtree_is_valid = AVLTree._validate_subtree(node.left) and AVLTree._validate_subtree(node.right)
-            node.update_height()
             return subtree_is_valid and abs(node.balance) < 2
         return True
 

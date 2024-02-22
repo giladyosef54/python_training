@@ -79,6 +79,7 @@ def post_order_traversal():
 @app.get('/validate_bst')
 def validate_bst():
     if tree.validate():
+        print(tree.get_visualized_tree())
         status = 200
         data = dumps({'message': 'BST is valid'})
     else:

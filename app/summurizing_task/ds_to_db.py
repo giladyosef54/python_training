@@ -1,7 +1,7 @@
 import pymongo
 import AVLTree
 
-
+#
 COLLECTIONS_METADATA_COL = 'dwarfs'
 TREASURES_AND_KEEPERS_DB = 'Treasures_and_keepers'
 HOST_URL = "mongodb://localhost:27017/"
@@ -77,8 +77,6 @@ class ds_to_db(AVLTree.AVLTree):
     def validate(self):
         return self._validate_subtree(self._root) and \
                 super()._validate_subtree(self._root)
-
-
 
     def compare_ds_db(self):
         tree_values = set()
