@@ -14,12 +14,12 @@ class BST(BinaryTree):
             self._root = self._insert_to_BST(value, self._root)
 
     def validate(self):
-        return self._validate_subtree()
+        return self._validate_subtree_order()
 
     @staticmethod
-    def _validate_subtree(node):
+    def _validate_subtree_order(node):
         if node:
             return (node.left.value < node.value if node.left else True) and \
                    (node.value <= node.right.value if node.right else True) and \
-                    BST._validate_subtree(node.left) and BST._validate_subtree(node.right)
+                   BST._validate_subtree_order(node.left) and BST._validate_subtree_order(node.right)
         return True

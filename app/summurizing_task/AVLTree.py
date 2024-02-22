@@ -51,8 +51,8 @@ class AVLTree(BST):
     def validate(self):
         """:returns True if the tree is validate as AVL (every subtree is balanced, and for every subroot -
         left is smaller and right is big or equal), false otherwise."""
-        return super()._validate_subtree(self._root) and \
-                self._validate_subtree(self._root)
+        return super()._validate_subtree_order(self._root) and \
+               self._validate_subtree_balance(self._root)
 
     @staticmethod
     def _insert(subroot, value):
@@ -83,6 +83,9 @@ class AVLTree(BST):
 
     @staticmethod
     def _delete(node, value):
+        """Deletes a value from the tree. If the value does not exist in the tree, does nothing.
+        if current value is value to delete, determines the current state, and according to it execute how to delete
+        the value, else, search for its desire place in the tree. After deleting, balanced the tree bottom-up."""
         if node is not None:
             if value == node.value:
                 if node.left is None and node.right is not None:
@@ -115,11 +118,11 @@ class AVLTree(BST):
             elif value > node.value:
                 node.right = AVLTree._delete(node.right, value)
                 node = AVLTree.balance_subtree(node)
-            node.update_height()
         return node
 
     @staticmethod
     def _find(node, value):
+        """:returns a node from the tree with the required value if exit, None otherwise."""
         if node:
             if value == node.value:
                 return node
@@ -130,6 +133,7 @@ class AVLTree(BST):
 
     @staticmethod
     def replace_node(node, new_node):
+        """Remove a node and connect a new node instead of it."""
         if node.parent:
             if node.parent.value < node.value:
                 node.parent.right = new_node
@@ -140,29 +144,25 @@ class AVLTree(BST):
             new_node.parent = node.parent
 
     @staticmethod
-    def balance_subtree(root):
-        root.update_height()
-        left_height = 0 if root.left is None else root.left.height
-        right_height = 0 if root.right is None else root.right.height
+    def balance_subtree(subroot):
+        """If the subtree is unbalanced - balance the subtree.
+        :returns the new subroot"""
+        subroot.update_height()
 
-        if abs(left_height - right_height) == 2:
-            if left_height < right_height:
-                rl_height = 0 if root.right.left is None else root.right.left.height
-                rr_height = 0 if root.right.right is None else root.right.right.height
+        balance = subroot.balance
 
-                if rl_height > rr_height:
-                    root = AVLTree._rotate_rl(root)
-                else:
-                    root = AVLTree._rotate_left(root)
+        if balance > 1:
+            if subroot.right.balance < 0:
+                subroot = AVLTree._rotate_rl(subroot)
             else:
-                ll_height = 0 if root.left.left is None else root.left.left.height
-                lr_height = 0 if root.left.right is None else root.left.right.height
+                subroot = AVLTree._rotate_left(subroot)
 
-                if ll_height > lr_height:
-                    root = AVLTree._rotate_right(root)
-                else:
-                    root = AVLTree._rotate_lr(root)
-        return root
+        elif balance < -1:
+            if subroot.left.balance < 0:
+                subroot = AVLTree._rotate_right(subroot)
+            else:
+                subroot = AVLTree._rotate_lr(subroot)
+        return subroot
 
     @staticmethod
     def _rotate_left(node):
@@ -229,9 +229,10 @@ class AVLTree(BST):
                 father.right = son
 
     @staticmethod
-    def _validate_subtree(node):
+    def _validate_subtree_balance(node):
+        """:returns True if the subtree is (recursively) balanced, false otherwise."""
         if node:
-            subtree_is_valid = AVLTree._validate_subtree(node.left) and AVLTree._validate_subtree(node.right)
+            subtree_is_valid = AVLTree._validate_subtree_balance(node.left) and AVLTree._validate_subtree_balance(node.right)
             return subtree_is_valid and abs(node.balance) < 2
         return True
 
