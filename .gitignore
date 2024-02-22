@@ -1,3 +1,5 @@
 /venv
 /.idea
 /tutorial-env
+app/summurizing_task/__pycache__
+app/summurizing_task/dist
