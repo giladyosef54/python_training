@@ -3,31 +3,27 @@ from BinaryTree import BinaryTree
 
 
 class AVLTree(BST):
+    """A class to extends the behavior so that the tree always stays balanced."""
     class AVLNode(BinaryTree.Node):
-
+        """A class to extends the behavior of Node to fit for AVL requirements."""
         def __init__(self, value):
             super().__init__(value)
             self.parent = None
             self.height = 1
 
         def update_height(self):
+            """Updates height field. A leaf height would defined as 1."""
             self.height = \
                 max(0 if self.right is None else self.right.height,
                     0 if self.left is None else self.left.height) + 1
 
         @property
-        def height(self):
-            return self._height
-
-        @height.setter
-        def height(self, height):
-            self._height = height
-
-        @property
         def balance(self):
+            """Evaluates height(right) - height(left). If te tree is balanced the result would be between -1 to 1."""
             return (0 if self.right is None else self.right.height) - (0 if self.left is None else self.left.height)
 
         def get_mostright_son(self):
+            """:returns the most right son of the subroot. Apparently, the biggest value in the subtree."""
             if self.right is None:
                 return self
             else:
@@ -37,51 +33,51 @@ class AVLTree(BST):
         super().__init__()
 
     def insert(self, value):
+        """Insert a value to the tree. If the tree is empty (meaning: self._root is None) - simply assigning self._root
+        to a subroot with the value of ``value``, else - use the recursive method to insert the value down in the tree."""
         if self._root is None:
             self._root = AVLTree.AVLNode(value)
         else:
-            self._root = self._insert_to_node(value, self._root)
+            self._root = self._insert(self._root, value)
 
     def delete(self, value):
+        """Deletes the value ``value`` from the tree."""
         self._root = AVLTree._delete(self._root, value)
 
     def exist(self, value):
+        """:returns True if value is in the tree,false otherwise."""
         return bool(AVLTree._find(self._root, value))
 
     def validate(self):
+        """:returns True if the tree is validate as AVL (every subtree is balanced, and for every subroot -
+        left is smaller and right is big or equal), false otherwise."""
         return super()._validate_subtree(self._root) and \
                 self._validate_subtree(self._root)
 
     @staticmethod
-    def _insert_to_node(value, node):
+    def _insert(subroot, value):
+        """Insert the value to the fit place in the subtree, then balance the tree (if required).
+        :return returns the new subroot in order to maintaining the linking between the nodes in the tree."""
+        subroot = AVLTree._insert_to_subtree(subroot, value)
+        AVLTree.balance_subtree(subroot)
+
+        return subroot
+
+    @staticmethod
+    def _insert_to_subtree(node, value):
+        """Insert the value to the fit place in the subtree, so the tree stays BST.
+        :returns the new subtree.
+        :param node: subroot mustn't be None."""
         if value < node.value:
             if node.left is None:
                 AVLTree.generate_son(node, value)
             else:
-                node.left = AVLTree._insert_to_node(value, node.left)
+                node.left = AVLTree._insert(node.left, value)
         else:
             if node.right is None:
                 AVLTree.generate_son(node, value)
             else:
-                node.right = AVLTree._insert_to_node(value, node.right)
-        node.update_height()
-        balance = node.balance
-
-        # Left Left Case
-        if balance < -1 and value < node.left.value:
-            return AVLTree._rotate_right(node)
-
-        # Right Right Case
-        if balance > 1 and value > node.right.value:
-            return AVLTree._rotate_left(node)
-
-        # Left Right Case
-        if balance < -1 and value > node.left.value:
-            return AVLTree._rotate_lr(node)
-
-        # Right Left Case
-        if balance > 1 and value < node.right.value:
-            return AVLTree._rotate_rl(node)
+                node.right = AVLTree._insert(node.right, value)
 
         return node
 

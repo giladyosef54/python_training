@@ -3,8 +3,9 @@ from abc import abstractmethod, ABC
 
 class BinaryTree(ABC):
     """An abstract class to represent and implement a binary tree data structure. Notice that the user shouldn't access
-    to node objects, and treat the behinds of the class as black box."""
+    to subroot objects, and treat the behinds of the class as black box."""
     class Node:
+        """A class to represents the nodes in the BinaryTree. the user has no reason to access or manipulate it."""
         def __init__(self, value):
             self.left = None
             self.right = None
@@ -76,7 +77,7 @@ class BinaryTree(ABC):
 
     @staticmethod
     def _get_visualized_tree(node, level = 0):
-        """:returns a str that visualized the hierarchy under node"""
+        """:returns a str that visualized the hierarchy under subroot"""
         if node:
             visual = '--' * level + str(node.value) + '\n'
             visual += BinaryTree._get_visualized_tree(node.left, level + 1)
