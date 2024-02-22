@@ -59,7 +59,7 @@ class AVLTree(BST):
         """Insert the value to the fit place in the subtree, then balance the tree (if required).
         :return returns the new subroot in order to maintaining the linking between the nodes in the tree."""
         subroot = AVLTree._insert_to_subtree(subroot, value)
-        AVLTree.balance_subtree(subroot)
+        subroot = AVLTree.balance_subtree(subroot)
 
         return subroot
 
@@ -141,6 +141,7 @@ class AVLTree(BST):
 
     @staticmethod
     def balance_subtree(root):
+        root.update_height()
         left_height = 0 if root.left is None else root.left.height
         right_height = 0 if root.right is None else root.right.height
 
@@ -152,13 +153,13 @@ class AVLTree(BST):
                 if rl_height > rr_height:
                     root = AVLTree._rotate_rl(root)
                 else:
-                    root = AVLTree._rotate_right(root)
+                    root = AVLTree._rotate_left(root)
             else:
                 ll_height = 0 if root.left.left is None else root.left.left.height
                 lr_height = 0 if root.left.right is None else root.left.right.height
 
                 if ll_height > lr_height:
-                    root = AVLTree._rotate_left(root)
+                    root = AVLTree._rotate_right(root)
                 else:
                     root = AVLTree._rotate_lr(root)
         return root
