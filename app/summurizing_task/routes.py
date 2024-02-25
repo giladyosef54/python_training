@@ -1,35 +1,37 @@
-import ds_to_db
+import MongoBackedAVL
 from flask import Flask, request
 from json import dumps
 
 app = Flask(__name__)
 
-tree = ds_to_db.ds_to_db()
+tree = MongoBackedAVL.MongoBackedAVL()
 
 
 @app.post('/insert_treasure')
 def insert_treasure():
     treasure = request.get_json()
-    status = tree.insert(treasure['value'])
-    if status == 200:
-        response = 'Successfully inserted', status
-    else:
-        response = 'Something went wrong', status
+    try:
+        tree.insert(treasure['value'])
+        response = 'Successfully inserted', 200
+
+    except ValueError as e:
+        response = e.args[0], 400
+
     return response
 
 
 @app.delete('/delete_all_treasures')
 def delete_all_treasures():
-    return 'Cleared', tree.clear()
+    tree.clear()
+    return 'Cleared', 200
 
 
 @app.get('/get_treasures')
 def get_treasures():
-    response = {'treasures':[]}
-    treasures_list = response['treasures']
+    treasures_list = []
     for val in tree:
         treasures_list.append(val)
-    return response
+    return {'treasures': treasures_list}
 
 
 @app.delete('/delete_treasure')
