@@ -17,9 +17,9 @@ class MongoBackedAVL(AVLTree.AVLTree):
                  connect_str = HOST_URL):
 
         super().__init__()
-        self._treasures = MongoCollectionManager(connect_str, database_name, dwarf_name)
+        self._treasures_db = MongoCollectionManager(connect_str, database_name, dwarf_name)
 
-        for treasure in self._treasures.get_values():
+        for treasure in self._treasures_db.get_values():
             super().insert(treasure)
 
     def insert(self, value):
@@ -27,10 +27,10 @@ class MongoBackedAVL(AVLTree.AVLTree):
             raise ValueError('Value already exist, can\'t insert.')
         else:
             super().insert(value)
-            self._treasures.insert_value(value)
+            self._treasures_db.insert_value(value)
 
     def clear(self):
-        self._treasures.clear_col()
+        self._treasures_db.clear_col()
         super().clear()
 
     def delete(self, value):
@@ -38,7 +38,7 @@ class MongoBackedAVL(AVLTree.AVLTree):
             raise ValueError("Value not found.")
         else:
             super().delete(value)
-            self._treasures.delete_value(value)
+            self._treasures_db.delete_value(value)
 
     def search_treasure(self, value):
         return self.exist(value)

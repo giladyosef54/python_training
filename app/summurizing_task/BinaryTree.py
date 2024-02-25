@@ -48,7 +48,10 @@ class BinaryTree(ABC):
     @staticmethod
     def _get_in_order_values(subroot, values_list = []):
         """:returns a list with all the values under ``subroot`` in format of:
-        [``subroot.left``, ``subroot.value``, ``subroot.right``]"""
+        [``subroot.left``, ``subroot.value``, ``subroot.right``]
+        :param subroot - current subroot to traverse
+        :type subroot - node
+        :param values_list - holds the already visited values"""
         if subroot:
             BinaryTree._get_in_order_values(subroot.left, values_list)
             values_list.append(subroot.value)
@@ -58,7 +61,10 @@ class BinaryTree(ABC):
     @staticmethod
     def _get_pre_order_values(subroot, values_list = []):
         """:returns a list with all the values under ``subroot`` in format of:
-        [``subroot.value``, ``subroot.left``, ``subroot.right``]"""
+        [``subroot.value``, ``subroot.left``, ``subroot.right``]
+        :param subroot - current subroot to traverse
+        :type subroot - node
+        :param values_list - holds the already visited values"""
         if subroot:
             values_list.append(subroot.value)
             BinaryTree._get_pre_order_values(subroot.left, values_list)
@@ -68,7 +74,10 @@ class BinaryTree(ABC):
     @staticmethod
     def _get_post_order_values(subroot, values_list = []):
         """:returns a list with all the values under ``subroot`` in format of:
-        [``subroot.left``, ``subroot.right``, ``subroot.value``]"""
+        [``subroot.left``, ``subroot.right``, ``subroot.value``]
+        :param subroot - current subroot to traverse
+        :type subroot - node
+        :param values_list - holds the already visited values"""
         if subroot:
             BinaryTree._get_post_order_values(subroot.left, values_list)
             BinaryTree._get_post_order_values(subroot.right, values_list)
@@ -77,7 +86,8 @@ class BinaryTree(ABC):
 
     @staticmethod
     def _get_visualized_tree(node, level = 0):
-        """:returns a str that visualized the hierarchy under subroot"""
+        """:returns a str that visualized the hierarchy under subroot
+        :param level - current node's level (root level is 0, his sons are 1, their sons are 2, etc"""
         if node:
             visual = '--' * level + str(node.value) + '\n'
             visual += BinaryTree._get_visualized_tree(node.left, level + 1)

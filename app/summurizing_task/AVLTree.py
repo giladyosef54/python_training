@@ -133,7 +133,9 @@ class AVLTree(BST):
 
     @staticmethod
     def replace_node(node, new_node):
-        """Remove a node and connect a new node instead of it."""
+        """Remove a node and connect a new node instead of it.
+        :param node - the node to be deleted
+        :param new_node - a new node to replace the old one"""
         if node.parent:
             if node.parent.value < node.value:
                 node.parent.right = new_node
