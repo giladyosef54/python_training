@@ -2,7 +2,9 @@ import pymongo
 
 
 class MongoCollectionManager:
+    """A class to manage a collection in mongodb."""
     def __init__(self, connect_str, database_name, col_name):
+
         client = pymongo.MongoClient(connect_str)
         self._col = client[database_name][col_name]
         self._id_gen = self._col.count_documents({})

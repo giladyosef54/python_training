@@ -1,15 +1,17 @@
 import pymongo
 from mongoCollectionManager import MongoCollectionManager
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import AVLTree
 
+load_dotenv()
 
-TREASURES_AND_KEEPERS_DB = 'Treasures_and_keepers'
-HOST_URL = "mongodb://localhost:27017/"
+
+TREASURES_AND_KEEPERS_DB = os.getenv("DATA_BASE")
+HOST_URL = os.getenv("URL")
 
 
 class MongoBackedAVL(AVLTree.AVLTree):
-    def __init__(self, dwarf_name = 'gilad_yosef',  # Collection of records
+    def __init__(self, dwarf_name = 'gilad_yosef',
                  database_name = TREASURES_AND_KEEPERS_DB,
                  connect_str = HOST_URL):
 
