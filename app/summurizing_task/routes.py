@@ -37,11 +37,12 @@ def get_treasures():
 @app.delete('/delete_treasure')
 def delete_treasure():
     treasure = request.get_json()
-    status = tree.delete(treasure['value'])
-    if status == 200:
-        response = 'Successfully deleted', status
-    else:
-        response = 'Something went wrong', status
+    try:
+        tree.delete(treasure['value'])
+        response = 'Successfully deleted', 200
+    except ValueError as e:
+        response = e.args[0], 400
+
     return response
 
 
