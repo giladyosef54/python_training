@@ -1,13 +1,14 @@
-import pymongo
-from mongoCollectionManager import MongoCollectionManager
 from dotenv import load_dotenv
 import AVLTree
+import pymongo
+from mongoCollectionManager import MongoCollectionManager
+from os import getenv
 
 load_dotenv()
 
 
-TREASURES_AND_KEEPERS_DB = os.getenv("DATA_BASE")
-HOST_URL = os.getenv("URL")
+TREASURES_AND_KEEPERS_DB = getenv("DATA_BASE")
+HOST_URL = getenv("URL")
 
 
 class MongoBackedAVL(AVLTree.AVLTree):
