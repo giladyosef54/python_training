@@ -1,10 +1,18 @@
 import MongoBackedAVL
 from flask import Flask, request
 from json import dumps
+import pymongo
+
 
 app = Flask(__name__)
 
-tree = MongoBackedAVL.MongoBackedAVL()
+try:
+    tree = MongoBackedAVL.MongoBackedAVL()
+except Exception as e:
+    print("There is some problem with connecting to the database server, "
+          "please validate the connection string and the server connection.\n")
+    print(e.args[0])
+    raise SystemExit
 
 
 @app.post('/insert_treasure')
@@ -16,13 +24,24 @@ def insert_treasure():
 
     except ValueError as e:
         response = e.args[0], 400
+    except Exception as e:
+        print("There is some problem, probably with connecting to the database server, "
+              "please validate the connection string and that the server is activate.\n")
+        print(e.args[0])
+        raise SystemExit
 
     return response
 
 
 @app.delete('/delete_all_treasures')
 def delete_all_treasures():
-    tree.clear()
+    try:
+        tree.clear()
+    except Exception as e:
+        print("There is some problem, probably with connecting to the database server, "
+              "please validate the connection string and that the server is activate.\n")
+        print(e.args[0])
+        raise SystemExit
     return 'Cleared', 200
 
 
@@ -42,6 +61,11 @@ def delete_treasure():
         response = 'Successfully deleted', 200
     except ValueError as e:
         response = e.args[0], 400
+    except Exception as e:
+        print("There is some problem, probably with connecting to the database server, "
+              "please validate the connection string and that the server is activate.\n")
+        print(e.args[0])
+        raise SystemExit
 
     return response
 
@@ -51,7 +75,15 @@ def search_treasure():
     value = request.args.get('value')
     value = float(value)
 
-    if tree.search_treasure(value):
+    try:
+        found = tree.search_treasure(value)
+    except Exception as e:
+        print("There is some problem, probably with connecting to the database server, "
+              "please validate the connection string and that the server is activate.\n")
+        print(e.args[0])
+        raise SystemExit
+
+    if found:
         response = {'message': 'Treasure found!'}, 200
     else:
         response = {'message': 'Treasure not found'}, 400
@@ -89,8 +121,6 @@ def validate_bst():
         status = 400
         data = dumps({'message': 'BST is not valid'})
     return data, status
-
-
 
 
 def main():
